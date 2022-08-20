@@ -82,8 +82,11 @@ def test():
     html = html + add("JPEG-Ghosts (40):", jpeg_ghosts_40)
     html = html + add("JPEG-Ghosts (60):", jpeg_ghosts_60)
     html = html + add("JPEG-Ghosts (80):", jpeg_ghosts_80)
-    for i in range(0, len(ela)):
-        html = html + add("ELA (Demosaicing artifacts, block size: %d):" %i, ela[i])
+
+    k = 0
+    for i in range (0, 100, 10):
+        html = html + add("ELA (Demosaicing artifacts, block size: %d):" %i, ela[k])
+        k = k + 1
 
     html += ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>'
     html += '<script type="text/javascript" src="static/index.js"></script>'
