@@ -314,7 +314,11 @@ def jpeg_ghost_multiple(file_path):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
 
-    img = cv.imread(file_path)
+
+    if not img:
+        img = cv.imread(file_path)
+    else:
+        img = np.array(img)
     img_rgb = img[:, :, ::-1]
 
     # Quality of the reasaved images
@@ -332,7 +336,7 @@ def jpeg_ghost_multiple(file_path):
     plt.xticks([]), plt.yticks([])
 
     # Get the name of the image
-    base = basename(file_path)
+    base = os.path.join(tempfile.mkdtemp(), 'bla')
     file_name = os.path.splitext(base)[0]
     save_file_name = file_name+"_temp.jpg"
     bar.update(1)
@@ -379,8 +383,15 @@ def jpeg_ghost_multiple(file_path):
     bar.finish()
     print("Done")
     plt.suptitle('Exposing digital forgeries by JPEG Ghost')
-    plt.show()
+    #plt.show()
+
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
     os.remove(save_file_name)
+    return my_base64_jpgData.decode("utf-8")
 
 
 def jpeg_ghost(file_path, quality, img=None):
@@ -394,7 +405,6 @@ def jpeg_ghost(file_path, quality, img=None):
         img = cv.imread(file_path)
     else:
         img = np.array(img)
-        print(type(img))
     img_rgb = img[:, :, ::-1]
 
     # Quality of the reasaved images
@@ -480,7 +490,10 @@ def noise_inconsistencies(file_path, block_size):
     if block_size == None:
         block_size = 8
 
-    img = cv.imread(file_path)
+    if not img:
+        img = cv.imread(file_path)
+    else:
+        img = np.array(img)
     img_rgb = img[:, :, ::-1]
 
     imgYCC = cv.cvtColor(img, cv.COLOR_BGR2YCrCb)
@@ -516,8 +529,16 @@ def noise_inconsistencies(file_path, block_size):
     plt.xticks([]), plt.yticks([])
     plt.subplot(1, 2, 2), plt.imshow(noise_map), plt.title('Analysis')
     plt.xticks([]), plt.yticks([])
-    plt.suptitle('Exposing digital forgeries by using Noise Inconsistencies')
-    plt.show()
+    #plt.suptitle('Exposing digital forgeries by using Noise Inconsistencies')
+    #plt.show()
+
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
+    #os.remove(save_file_name)
+    return my_base64_jpgData.decode("utf-8")
 
 #########################################################################
 ###################################################################
@@ -531,7 +552,10 @@ def median_noise_inconsistencies(file_path, n_size):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
 
-    img = cv.imread(file_path)
+    if not img:
+        img = cv.imread(file_path)
+    else:
+        img = np.array(img)
     img_rgb = img[:, :, ::-1]
 
     flatten = True
@@ -560,7 +584,14 @@ def median_noise_inconsistencies(file_path, n_size):
     plt.xticks([]), plt.yticks([])
     plt.suptitle(
         'Exposing digital forgeries by using Median-filter noise residue inconsistencies')
-    plt.show()
+    #plt.show()
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
+    #os.remove(save_file_name)
+    return my_base64_jpgData.decode("utf-8")
 
 #########################################################################
 ############################################
@@ -574,12 +605,15 @@ def ela(file_path, quality, block_size):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     if block_size == None:
         block_size = 8
-    img = cv.imread(file_path)
+    if not img:
+        img = cv.imread(file_path)
+    else:
+        img = np.array(img)
     img_rgb = img[:, :, ::-1]
     bar.update(5)
 
     # Get the name of the image
-    base = basename(file_path)
+    base = os.path.join(tempfile.mkdtemp(), 'bla')
     file_name = os.path.splitext(base)[0]
     save_file_name = file_name+"_temp.jpg"
 
@@ -614,8 +648,14 @@ def ela(file_path, quality, block_size):
     plt.subplot(1, 2, 2), plt.imshow(ela_map), plt.title('Analysis')
     plt.xticks([]), plt.yticks([])
     plt.suptitle('Exposing digital forgeries by using Error Level Analysis')
-    plt.show()
+
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
     os.remove(save_file_name)
+    return my_base64_jpgData.decode("utf-8")
 
 
 #########################################################################
@@ -628,7 +668,10 @@ def cfa_tamper_detection(file_path):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     warnings.filterwarnings("ignore")
 
-    img = cv.imread(file_path)
+    if not img:
+        img = cv.imread(file_path)
+    else:
+        img = np.array(img)
     img = img[:, :, ::-1]
 
     std_thresh = 5
@@ -749,9 +792,15 @@ def cfa_tamper_detection(file_path):
     plt.xticks([]), plt.yticks([])
     plt.subplot(1, 2, 2), plt.imshow(F1Map), plt.title('Analysis')
     plt.xticks([]), plt.yticks([])
-    plt.suptitle('Image tamper detection based on demosaicing artifacts')
-    plt.show()
+    #plt.suptitle('Image tamper detection based on demosaicing artifacts')
+    #plt.show()
 
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
+    return my_base64_jpgData.decode("utf-8")
 
 def bilinInterolation(cfa_im, bin_filter, cfa):
 
