@@ -72,11 +72,9 @@ def analyze():
     exif_str = foreimg.exif_check(str(tmp_file.name), 1)
 
     tamper_detection = foreimg.cfa_tamper_detection(str(tmp_file.name))
-    """
     ela = []
     for i in range (0, 100, 10):
         ela.append(foreimg.ela(str(tmp_file.name), i, 80))
-    """
     jpeg_ghosts_20 = foreimg.jpeg_ghost(None, 20, img)
     jpeg_ghosts_40 = foreimg.jpeg_ghost(None, 40, img)
     jpeg_ghosts_60 = foreimg.jpeg_ghost(None, 60, img)
@@ -89,12 +87,10 @@ def analyze():
     html = html + add("JPEG-Ghosts (40):", jpeg_ghosts_40)
     html = html + add("JPEG-Ghosts (60):", jpeg_ghosts_60)
     html = html + add("JPEG-Ghosts (80):", jpeg_ghosts_80)
-    """
     k = 0
     for i in range (0, 100, 10):
         html = html + add("ELA (Demosaicing artifacts, block size: %d):" %i, ela[k])
         k = k + 1
-    """
 
     html += ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>'
     html += '<script type="text/javascript" src="static/index.js"></script>'
