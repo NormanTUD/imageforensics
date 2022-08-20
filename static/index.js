@@ -30,12 +30,6 @@ window.onload = () => {
 				}
 			});
 		}
-
-		$.post('analyze', $("#imgform").serialize(), function(status) {
-			if (status.st) {
-				log("Photo Uploaded");
-			}
-		}, "json");
 	});
 };
 

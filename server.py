@@ -52,15 +52,15 @@ def analyze():
     if file is None:
         return "File could not be POSTed from your Computer", 490
 
-    #file = request.files['image'].read() ## byte file
-    #if not file:
-    #    return "file image was not defined."
-    npimg = np.fromstring(file, np.uint8)
+    file.seek(0)
+    pprint(file)
+    npimg = np.fromstring(file.read(), np.uint8)
     img = cv.imdecode(npimg,cv.IMREAD_COLOR)
     img = Image.fromarray(img.astype("uint8"))
 
     tmp_file = tempfile.NamedTemporaryFile(delete=False)
-    tmp_file.write(file)
+    file.seek(0)
+    tmp_file.write(file.read())
     tmp_file.flush()
 
     exif_str = foreimg.exif_check(str(tmp_file.name), 1)
