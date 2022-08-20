@@ -48,7 +48,11 @@ def add_text(name, text):
 
 @app.route('/analyze' , methods=['POST'])
 def analyze():
-    file = request.files['image'].read() ## byte file
+    file = request.files.get('image', None)
+    if file is None:
+        return "File could not be POSTed from your Computer", 490
+
+    #file = request.files['image'].read() ## byte file
     #if not file:
     #    return "file image was not defined."
     npimg = np.fromstring(file, np.uint8)
@@ -58,10 +62,6 @@ def analyze():
     tmp_file = tempfile.NamedTemporaryFile(delete=False)
     tmp_file.write(file)
     tmp_file.flush()
-
-    pprint("===========")
-    print(tmp_file.name)
-    pprint("===========")
 
     exif_str = foreimg.exif_check(str(tmp_file.name), 1)
 
