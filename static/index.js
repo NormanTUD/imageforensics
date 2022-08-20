@@ -11,7 +11,7 @@ window.onload = () => {
 			formData.append('image' , input.files[0]);
 			log("fd", formData)
 			$.ajax({
-				url: "http://localhost:5000/analyze", // fix this to your liking
+				url: "analyze", // fix this to your liking
 				type:"POST",
 				data: formData,
 				cache: false,
@@ -30,6 +30,12 @@ window.onload = () => {
 				}
 			});
 		}
+
+		$.post('analyze', $("#imgform").serialize(), function(status) {
+			if (status.st) {
+				log("Photo Uploaded");
+			}
+		}, "json");
 	});
 };
 
