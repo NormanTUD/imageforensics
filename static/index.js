@@ -22,10 +22,12 @@ window.onload = () => {
 					$("#result").html(data.responseText);
 					console.log("upload error" , data);
 					console.log(data);
+					beep();
 				},
 				success: function(data){
 					log("success", data);
 					$("#result").html(data);
+					beep();
 				}
 			});
 		}

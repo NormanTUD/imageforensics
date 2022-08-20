@@ -102,8 +102,6 @@ def analyze():
 
     html += "<div>"
 
-    os.remove(tmp_file.name)
-
     return html
 
 @app.route('/')
