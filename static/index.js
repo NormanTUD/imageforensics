@@ -20,13 +20,11 @@ window.onload = () => {
 				error: function(data){
 					$("#result").html(data.responseText);
 					console.log("upload error" , data);
-					console.log(data.getAllResponseHeaders());
+					console.log(data);
 				},
 				success: function(data){
 					log("success", data);
-					bytestring = data['status']
-					image = bytestring.split('\'')[1]
-					$("#result").html(data.responseText);
+					$("#result").html(data);
 				}
 			});
 		}
