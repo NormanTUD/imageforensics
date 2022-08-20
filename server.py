@@ -33,19 +33,17 @@ def pretty_print_POST(req):
     ))
 
 
-def base64_to_img(base64):
-    return "<img src='data:image/png;base64," + base64 + "' />"
+def img_to_base64 (img):
+    return "<img src='data:image/png;base64," + img + "' />"
 
 def add(name, img):
-    return "<h2>" + name + "</h2>" + base64_to_img(img)
+    return "<h2>" + name + "</h2>" + img_to_base64(img)
 
-@app.route('/test' , methods=['GET','POST'])
+@app.route('/test' , methods=['POST'])
 def test():
-    # print(request.files , file=sys.stderr)
-    file = request.files.get('image', False)
-    if not file:
-        return "file image was not defined."
-    file = file.read() ## byte file
+    file = request.files['image'].read() ## byte file
+    #if not file:
+    #    return "file image was not defined."
     npimg = np.fromstring(file, np.uint8)
     img = cv.imdecode(npimg,cv.IMREAD_COLOR)
     img = Image.fromarray(img.astype("uint8"))
@@ -53,6 +51,8 @@ def test():
     img = foreimg.jpeg_ghost(None, 80, img)
 
     html = add("JPEG-Ghosts:", img)
+
+    return html
 
 @app.route('/home')
 def home():
