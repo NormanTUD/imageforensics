@@ -124,12 +124,12 @@ def exif_check(file_path, server=0):
 
     # Check Modify Date
     string = "";
-    string += check_software_modify(exif_code_form)
-    string += check_modify_date(exif_code_form)
-    string += check_original_date(exif_code_form)
-    string += check_camera_information(tags)
-    string += check_gps_location(exif_code_form)
-    string += check_author_copyright(exif_code_form)
+    string += check_software_modify(exif_code_form) + "<br>"
+    string += check_modify_date(exif_code_form) + "<br>"
+    string += check_original_date(exif_code_form) + "<br>"
+    string += check_camera_information(tags) + "<br>"
+    string += check_gps_location(exif_code_form) + "<br>"
+    string += check_author_copyright(exif_code_form) + "<br>"
 
     # Print Raw Image Metadata
     string += "\nRAW IMAGE METADATA"
@@ -236,15 +236,15 @@ def check_camera_information(info):
     iso_speed = get_if_exist(info, 'EXIF ISOSpeedRatings')
     flash = get_if_exist(info, 'EXIF Flash')
 
-    string = "\nCamera Infomation"
-    string += "-------------------------------------------------------------- "
-    string += "Make: \t \t %s" % make
-    string += "Model: \t \t %s" % model
-    string += "Exposure: \t %s " % exposure
-    string += "Aperture: \t %s" % aperture
-    string += "Focal Length: \t %s mm" % focal_length
-    string += "ISO Speed: \t %s" % iso_speed
-    string += "Flash: \t \t %s" % flash
+    string = "\nCamera Infomation<br>"
+    string += "-------------------------------------------------------------- <br>"
+    string += "Make: \t \t %s<br>" % make
+    string += "Model: \t \t %s<br>" % model
+    string += "Exposure: \t %s <br>" % exposure
+    string += "Aperture: \t %s<br>" % aperture
+    string += "Focal Length: \t %s mm<br>" % focal_length
+    string += "ISO Speed: \t %s<br>" % iso_speed
+    string += "Flash: \t \t %s<br>" % flash
     return string
 
 # Check GPS Location
@@ -253,7 +253,7 @@ def check_camera_information(info):
 def check_gps_location(info):
     gps_info = get_if_exist(info, 0x8825)
 
-    string += "\nLocation (GPS)"
+    string = "\nLocation (GPS)"
     string += "-------------------------------------------------------------- "
     if gps_info == None:
         return "GPS coordinates not found"
@@ -292,12 +292,12 @@ def check_author_copyright(info):
     copyright_tag = get_if_exist(info, 0x8298)
     profile_copyright = get_if_exist(info, 0xc6fe)
     string = ""
-    string += "\nAuthor and Copyright"
+    string += "\nAuthor and Copyright<br>"
 
-    string += "-------------------------------------------------------------- "
-    string += "Author \t \t %s " % author
-    string += "Copyright \t %s " % copyright_tag
-    string += "Profile: \t %s" % profile_copyright
+    string += "-------------------------------------------------------------- <br>"
+    string += "Author \t \t %s <br>" % author
+    string += "Copyright \t %s <br>" % copyright_tag
+    string += "Profile: \t %s<br>" % profile_copyright
 
     return string
 

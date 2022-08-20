@@ -40,6 +40,9 @@ def img_to_base64 (img):
 def add(name, img):
     return add_text(name, img_to_base64(img))
 
+def add_pre(name, text):
+    return add_text(name, "<pre>" + text + "</pre>")
+
 def add_text(name, text):
     return "<h2>" + name + "</h2>" + text
 
@@ -68,7 +71,7 @@ def test():
     jpeg_ghosts_80 = foreimg.jpeg_ghost(None, 80, img)
     jpeg_ghosts_100 = foreimg.jpeg_ghost(None, 100, img)
 
-    html = add_text("Exif-Daten:", exif_str)
+    html = add_pre("Exif-Daten:", exif_str)
     html = html + add("JPEG-Ghosts (20):", jpeg_ghosts_20)
     html = html + add("JPEG-Ghosts (40):", jpeg_ghosts_40)
     html = html + add("JPEG-Ghosts (60):", jpeg_ghosts_60)
@@ -76,7 +79,7 @@ def test():
 
     return html
 
-@app.route('/home')
+@app.route('/index.html')
 def home():
     return render_template('./index.jinja2')
 
