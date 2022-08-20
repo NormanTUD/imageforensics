@@ -46,8 +46,8 @@ def add_pre(name, text):
 def add_text(name, text):
     return "<h2>" + name + "</h2>" + text
 
-@app.route('/test' , methods=['POST'])
-def test():
+@app.route('/analyze' , methods=['POST'])
+def analyze():
     file = request.files['image'].read() ## byte file
     #if not file:
     #    return "file image was not defined."
@@ -96,7 +96,7 @@ def test():
 
     return html
 
-@app.route('/index.html')
+@app.route('/')
 def home():
     return render_template('./index.jinja2')
 
