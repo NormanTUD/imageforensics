@@ -1,3 +1,4 @@
+import tempfile
 from flask import Flask, render_template , request , jsonify
 from PIL import Image
 import os , io , sys
@@ -37,7 +38,10 @@ def img_to_base64 (img):
     return "<img src='data:image/png;base64," + img + "' />"
 
 def add(name, img):
-    return "<h2>" + name + "</h2>" + img_to_base64(img)
+    return add_text(name, img_to_base64(img))
+
+def add_text(name, text):
+    return "<h2>" + name + "</h2>" + text
 
 @app.route('/test' , methods=['POST'])
 def test():
@@ -48,9 +52,27 @@ def test():
     img = cv.imdecode(npimg,cv.IMREAD_COLOR)
     img = Image.fromarray(img.astype("uint8"))
 
-    img = foreimg.jpeg_ghost(None, 80, img)
+    tmp_file = tempfile.NamedTemporaryFile(delete=False)
+    tmp_file.write(file)
+    tmp_file.flush()
 
-    html = add("JPEG-Ghosts:", img)
+    pprint("===========")
+    print(tmp_file.name)
+    pprint("===========")
+
+    exif_str = foreimg.exif_check(str(tmp_file.name), 1)
+
+    jpeg_ghosts_20 = foreimg.jpeg_ghost(None, 20, img)
+    jpeg_ghosts_40 = foreimg.jpeg_ghost(None, 40, img)
+    jpeg_ghosts_60 = foreimg.jpeg_ghost(None, 60, img)
+    jpeg_ghosts_80 = foreimg.jpeg_ghost(None, 80, img)
+    jpeg_ghosts_100 = foreimg.jpeg_ghost(None, 100, img)
+
+    html = add_text("Exif-Daten:", exif_str)
+    html = html + add("JPEG-Ghosts (20):", jpeg_ghosts_20)
+    html = html + add("JPEG-Ghosts (40):", jpeg_ghosts_40)
+    html = html + add("JPEG-Ghosts (60):", jpeg_ghosts_60)
+    html = html + add("JPEG-Ghosts (80):", jpeg_ghosts_80)
 
     return html
 

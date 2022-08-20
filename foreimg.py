@@ -110,7 +110,7 @@ def check_file(data_path):
 ###############################################
 
 
-def exif_check(file_path):
+def exif_check(file_path, server=0):
     # Open image file for reading (binary mode)
     f = open(file_path, 'rb')
 
@@ -120,25 +120,29 @@ def exif_check(file_path):
     # Get the pure EXIF data of Image
     exif_code_form = extract_pure_exif(file_path)
     if exif_code_form == None:
-        print("The EXIF data has been stripped. Photo maybe is taken from facebook, twitter, imgur")
-        return
+        return "The EXIF data has been stripped. Photo maybe is taken from facebook, twitter, imgur"
 
     # Check Modify Date
-    check_software_modify(exif_code_form)
-    check_modify_date(exif_code_form)
-    check_original_date(exif_code_form)
-    check_camera_information(tags)
-    check_gps_location(exif_code_form)
-    check_author_copyright(exif_code_form)
+    string = "";
+    string += check_software_modify(exif_code_form)
+    string += check_modify_date(exif_code_form)
+    string += check_original_date(exif_code_form)
+    string += check_camera_information(tags)
+    string += check_gps_location(exif_code_form)
+    string += check_author_copyright(exif_code_form)
 
     # Print Raw Image Metadata
-    print("\nRAW IMAGE METADATA")
-    print("============================================================= \n")
-    print("EXIF Data")
+    string += "\nRAW IMAGE METADATA"
+    string += "============================================================= \n"
+    string += "EXIF Data"
     # pprint.pprint(decode_exif_data(exif_code_form))
     for tag in tags.keys():
         if tag not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename', 'EXIF MakerNote'):
-            print("%-35s:  %s" % (tag, tags[tag]))
+            string += ("%-35s:  %s" % (tag, tags[tag]))
+
+    print(string)
+
+    return string
 
 
 def extract_pure_exif(file_name):
@@ -174,20 +178,19 @@ def export_json(data):
 def check_software_modify(info):
     software = get_if_exist(info, 0x0131)
     if software != None:
-        print("Image edited with: %s" % software)
-        return True
-    return False
+        string = "Image edited with: %s" % software
+        return string
+    return ""
 
 # Check Modify Date
 
 
 def check_modify_date(info):
     modify_date = get_if_exist(info, 0x0132)
+    string = ""
     if modify_date != None:
-        print("Photo has been modified since it was created. Modified: %s" %
-              modify_date)
-        return True
-    return False
+        return "Photo has been modified since it was created. Modified: %s" % modify_date
+    return ""
 
 # Check Original date
 
@@ -195,10 +198,12 @@ def check_modify_date(info):
 def check_original_date(info):
     original_date = get_if_exist(info, 0x9003)
     create_date = get_if_exist(info, 0x9004)
+    string = ""
     if original_date != None:
-        print("The shutter actuation time: %s" % original_date)
+        string += "The shutter actuation time: %s" % original_date
     if create_date != None:
-        print("Image created at: %s" % create_date)
+        string += "Image created at: %s" % create_date
+    return string
 
 # Check Camera Information
 
@@ -231,15 +236,16 @@ def check_camera_information(info):
     iso_speed = get_if_exist(info, 'EXIF ISOSpeedRatings')
     flash = get_if_exist(info, 'EXIF Flash')
 
-    print("\nCamera Infomation")
-    print("-------------------------------------------------------------- ")
-    print("Make: \t \t %s" % make)
-    print("Model: \t \t %s" % model)
-    print("Exposure: \t %s " % exposure)
-    print("Aperture: \t %s" % aperture)
-    print("Focal Length: \t %s mm" % focal_length)
-    print("ISO Speed: \t %s" % iso_speed)
-    print("Flash: \t \t %s" % flash)
+    string = "\nCamera Infomation"
+    string += "-------------------------------------------------------------- "
+    string += "Make: \t \t %s" % make
+    string += "Model: \t \t %s" % model
+    string += "Exposure: \t %s " % exposure
+    string += "Aperture: \t %s" % aperture
+    string += "Focal Length: \t %s mm" % focal_length
+    string += "ISO Speed: \t %s" % iso_speed
+    string += "Flash: \t \t %s" % flash
+    return string
 
 # Check GPS Location
 
@@ -247,11 +253,11 @@ def check_camera_information(info):
 def check_gps_location(info):
     gps_info = get_if_exist(info, 0x8825)
 
-    print("\nLocation (GPS)")
-    print("-------------------------------------------------------------- ")
+    string += "\nLocation (GPS)"
+    string += "-------------------------------------------------------------- "
     if gps_info == None:
-        print("GPS coordinates not found")
-        return False
+        return "GPS coordinates not found"
+
     # print gps_info
     lat = None
     lng = None
@@ -267,11 +273,10 @@ def check_gps_location(info):
         if gps_longitude_ref != "E":
             lng = 0 - lng
 
-    print("Latitude \t %s North" % lat)
-    print("Longtitude \t %s East" % lng)
+    string += "Latitude \t %s North" % lat
+    string += "Longtitude \t %s East" % lng
 
-    return True
-
+    return string
 
 def convert_to_degress(value):
     """Helper function to convert the GPS coordinates 
@@ -286,11 +291,15 @@ def check_author_copyright(info):
     author = get_if_exist(info, 0x9c9d)
     copyright_tag = get_if_exist(info, 0x8298)
     profile_copyright = get_if_exist(info, 0xc6fe)
-    print("\nAuthor and Copyright")
-    print("-------------------------------------------------------------- ")
-    print("Author \t \t %s " % author)
-    print("Copyright \t %s " % copyright_tag)
-    print("Profile: \t %s" % profile_copyright)
+    string = ""
+    string += "\nAuthor and Copyright"
+
+    string += "-------------------------------------------------------------- "
+    string += "Author \t \t %s " % author
+    string += "Copyright \t %s " % copyright_tag
+    string += "Profile: \t %s" % profile_copyright
+
+    return string
 
 #########################################################################
 ##################################
