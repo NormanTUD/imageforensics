@@ -2,6 +2,9 @@
 
 # Copyright (C) Anh Duy TRAN
 
+import tempfile
+import base64
+import io
 import numpy as np
 import numpy.matlib as npm
 import argparse
@@ -371,14 +374,18 @@ def jpeg_ghost_multiple(file_path):
     os.remove(save_file_name)
 
 
-def jpeg_ghost(file_path, quality):
+def jpeg_ghost(file_path, quality, img=None):
 
     print("Analyzing...")
     bar = progressbar.ProgressBar(maxval=20,
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
 
-    img = cv.imread(file_path)
+    if not img:
+        img = cv.imread(file_path)
+    else:
+        img = np.array(img)
+        print(type(img))
     img_rgb = img[:, :, ::-1]
 
     # Quality of the reasaved images
@@ -397,7 +404,7 @@ def jpeg_ghost(file_path, quality):
     plt.xticks([]), plt.yticks([])
 
     # Get the name of the image
-    base = basename(file_path)
+    base = os.path.join(tempfile.mkdtemp(), 'bla')
     file_name = os.path.splitext(base)[0]
     save_file_name = file_name+"_temp.jpg"
     bar.update(1)
@@ -438,9 +445,16 @@ def jpeg_ghost(file_path, quality):
 
     bar.finish()
     print("Done")
-    plt.suptitle('Exposing digital forgeries by JPEG Ghost')
-    plt.show()
+    #plt.suptitle('Exposing digital forgeries by JPEG Ghost')
+    #plt.show()
     os.remove(save_file_name)
+
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
+    return my_base64_jpgData.decode("utf-8")
 
 #########################################################################
 #############################################
