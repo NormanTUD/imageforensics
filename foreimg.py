@@ -21,6 +21,8 @@ from scipy import ndimage
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 from os.path import basename
 
 
@@ -309,7 +311,7 @@ def check_author_copyright(info):
 
 def jpeg_ghost_multiple(file_path):
 
-    print("Analyzing...")
+    print("Analyzing JPEG Ghost Multiple...")
     bar = progressbar.ProgressBar(maxval=20,
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
@@ -396,7 +398,7 @@ def jpeg_ghost_multiple(file_path):
 
 def jpeg_ghost(file_path, quality, img=None):
 
-    print("Analyzing...")
+    print("Analyzing JPEG GHOST...")
     bar = progressbar.ProgressBar(maxval=20,
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
@@ -657,11 +659,12 @@ def ela(file_path, quality, block_size):
 #### Functions based on demosaicing artifacts ####
 ##################################################
 def cfa_tamper_detection(file_path):
-    print("Analyzing...")
+    print("Analyzing CFA...")
     bar = progressbar.ProgressBar(maxval=20,
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     warnings.filterwarnings("ignore")
 
+    print("reading " + file_path)
     img = cv.imread(file_path)
     img = img[:, :, ::-1]
 
@@ -693,6 +696,7 @@ def cfa_tamper_detection(file_path):
     bar.update(10)
     diffs = []
     f1_maps = []
+    print("... math ... ")
     for i in range(cfa_list.shape[0]):
 
         bin_filter = np.zeros((img.shape[0], img.shape[1], 3))

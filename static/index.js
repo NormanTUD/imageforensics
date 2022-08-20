@@ -4,6 +4,7 @@ function log (...msg) {
 
 window.onload = () => {
 	$('#sendbutton').click(() => {
+		$("#result").html("Die Analyse kann bis zu 5 Minuten dauern. Bitte einfach warten. Der Rechner piept 1x kurz, wenn das Ergebnis da ist.");
 		input = $('#imageinput')[0]
 		if(input.files && input.files[0])
 		{
@@ -34,7 +35,6 @@ window.onload = () => {
 
 
 function readUrl(input){
-	console.log("evoked readUrl")
 	if(input.files && input.files[0]){
 		let reader = new FileReader();
 		reader.onload = function(e){
