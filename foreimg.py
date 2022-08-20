@@ -552,10 +552,7 @@ def median_noise_inconsistencies(file_path, n_size):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
 
-    if not img:
-        img = cv.imread(file_path)
-    else:
-        img = np.array(img)
+    img = cv.imread(file_path)
     img_rgb = img[:, :, ::-1]
 
     flatten = True
@@ -605,10 +602,7 @@ def ela(file_path, quality, block_size):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     if block_size == None:
         block_size = 8
-    if not img:
-        img = cv.imread(file_path)
-    else:
-        img = np.array(img)
+    img = cv.imread(file_path)
     img_rgb = img[:, :, ::-1]
     bar.update(5)
 
@@ -668,10 +662,7 @@ def cfa_tamper_detection(file_path):
                                   widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     warnings.filterwarnings("ignore")
 
-    if not img:
-        img = cv.imread(file_path)
-    else:
-        img = np.array(img)
+    img = cv.imread(file_path)
     img = img[:, :, ::-1]
 
     std_thresh = 5

@@ -65,17 +65,31 @@ def test():
 
     exif_str = foreimg.exif_check(str(tmp_file.name), 1)
 
+    tamper_detection = foreimg.cfa_tamper_detection(str(tmp_file.name))
+    ela = []
+    for i in range (0, 100, 10):
+        ela.append(foreimg.ela(str(tmp_file.name), i, 80))
     jpeg_ghosts_20 = foreimg.jpeg_ghost(None, 20, img)
     jpeg_ghosts_40 = foreimg.jpeg_ghost(None, 40, img)
     jpeg_ghosts_60 = foreimg.jpeg_ghost(None, 60, img)
     jpeg_ghosts_80 = foreimg.jpeg_ghost(None, 80, img)
     jpeg_ghosts_100 = foreimg.jpeg_ghost(None, 100, img)
 
-    html = add_pre("Exif-Daten:", exif_str)
+    html = '<div id="toc"> <h3>Table of Contents</h3> </div> <hr/> <div id="contents">'
+    html = html + add_pre("Exif-Daten:", exif_str)
+    html = html + add("Tamper Detection (Median Filter Noise):", tamper_detection)
     html = html + add("JPEG-Ghosts (20):", jpeg_ghosts_20)
     html = html + add("JPEG-Ghosts (40):", jpeg_ghosts_40)
     html = html + add("JPEG-Ghosts (60):", jpeg_ghosts_60)
     html = html + add("JPEG-Ghosts (80):", jpeg_ghosts_80)
+    for i in range(0, len(ela)):
+        html = html + add("ELA (Demosaicing artifacts, block size: %d):" %i, ela[i])
+
+    html += ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>'
+    html += '<script type="text/javascript" src="static/index.js"></script>'
+    html += '<script type="text/javascript">toc();</script>'
+
+    html += "<div>"
 
     return html
 
