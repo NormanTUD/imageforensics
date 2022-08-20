@@ -134,13 +134,13 @@ def exif_check(file_path, server=0):
     string += check_author_copyright(exif_code_form) + "<br>"
 
     # Print Raw Image Metadata
-    string += "\nRAW IMAGE METADATA"
-    string += "============================================================= \n"
-    string += "EXIF Data"
+    string += "\nRAW IMAGE METADATA <br>"
+    string += "============================================================= <br>\n"
+    string += "EXIF Data <br>"
     # pprint.pprint(decode_exif_data(exif_code_form))
     for tag in tags.keys():
         if tag not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename', 'EXIF MakerNote'):
-            string += ("%-35s:  %s" % (tag, tags[tag]))
+            string += ("%-35s:  %s <br>" % (tag, tags[tag]))
 
     print(string)
 
