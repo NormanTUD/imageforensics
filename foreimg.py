@@ -139,7 +139,7 @@ def exif_check(file_path, server=0):
     string += "EXIF Data <br>"
     # pprint.pprint(decode_exif_data(exif_code_form))
     for tag in tags.keys():
-        if tag not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename', 'EXIF MakerNote'):
+        if tag not in ('JPEGThumbnail', 'TIFFThumbnail', 'EXIF MakerNote'):
             string += ("%-35s:  %s <br>" % (tag, tags[tag]))
 
     print(string)
