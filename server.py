@@ -93,7 +93,7 @@ def analyze():
         k = k + 1
 
     html += ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>'
-    html += '<script type="text/javascript" src="static/index.js"></script>'
+    html += '<script type="text/javascript" src="./static/index.js"></script>'
     html += '<script type="text/javascript">toc();</script>'
 
     html += "<div>"
